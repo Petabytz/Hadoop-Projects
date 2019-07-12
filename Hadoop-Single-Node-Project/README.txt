@@ -1,1 +1,0 @@
-Hadoop single node project repo
