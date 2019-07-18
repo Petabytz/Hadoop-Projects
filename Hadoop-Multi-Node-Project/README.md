@@ -22,16 +22,16 @@ petabytzuser2@petabytz:~$ $HADOOP_HOME/sbin/stop-all.sh
 
 The easiest is to put three machines in the same network with regard to hardware and software configuration.
 
-Update /etc/hosts on both machines. Put the alias to the ip addresses of all the machines. Here we are creating a cluster of 3 machines, one is master, one is slave1 and other is slave2:
+Update /etc/hosts on both machines. Put the alias to the ip addresses of all the machines. Here we are creating a cluster of 3 machines, one is master, one is datanode1 and other is datanode2:
 ```bash
 petabytzuser2@petabytz:$ sudo vim /etc/hosts
 ```
 
 Add the following lines for two node cluster
 ```
-172.16.136.140    master  # IP address of the master node
-172.16.136.141    slave1  # IP address of the slave1 node
-172.16.136.142    slave2  # IP address of the slave2 node
+192.168.1.18    masternode  # IP address of the master node
+192.168.1.20    datanode1  # IP address of the datanode1 node
+192.168.1.21    datanode2  # IP address of the datanode2 node
 ```
 
 ## SSH access
@@ -39,28 +39,28 @@ Add the following lines for two node cluster
 The petabytzuser2 user on the master (ssh petabytzuser2@petabytz) must be able to connect:
 
 * to its own user account on the master – i.e. ssh master in this context.
-* to the hduser1 user account on the slave (i.e. ssh petabytzuser2@slave1) via a password-less SSH login.
+* to the hduser1 user account on the slave (i.e. ssh petabytzuser2@datanode1) via a password-less SSH login.
 
 ## Set up password-less SSH login between cluster:
 ```bash
-petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@slave1
-petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@slave2
+petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode1
+petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode2
 ```
 
-Connect with user hduser1 from the master to the user account hduser1 on the slave1 and slave2.
+Connect with user petabytzuser2 from the master to the user account hduser1 on the datanode1 and datanode2.
 From master to master
 ```bash
 petabytzuser2@oetabytz:~$ ssh masternode
 ```
 
-From master to slave1
+From master to datanode1
 ```bash
-petabytzuser2@masternode:~$ ssh slave1
+petabytzuser2@masternode:~$ ssh datanode1
 ```
 
-From slave1 to slave2
+From datanode1 to datanode2
 ```bash
-petabytzuser2@slave1:~$ ssh slave2
+petabytzuser2@datanode1:~$ ssh datanode2
 ```
 
 ## Hadoop
@@ -186,7 +186,7 @@ petabytzuser2@masternode:~$ sudo chown petabytzuser2:hadoop_petabyt_group -R /ap
 
 ## Applying Slave node specific Hadoop configuration (Only for slave nodes)
 
-Since we have three slave nodes, we will be applying the following changes over slave1 and slave2 nodes:
+Since we have three slave nodes, we will be applying the following changes over datanode1 and datanode2 nodes:
 
 Remove existing Hadoop_data folder (which was created while single node hadoop setup)
 ```bash
@@ -216,7 +216,7 @@ $ hdfs namenode -format
 petabytzuser2@masternode:~$ start-dfs.sh && start-yarn.sh
 ```
 
-By this command the NameNode daemon is started on master, and DataNode daemons are started on all slaves (here: slave1 and slave2).
+By this command the NameNode daemon is started on master, and DataNode daemons are started on all slaves (here: datanode1 and datanode2).
 
 ## Track/Monitor/Verify Hadoop cluster (Run on any Node)
 
@@ -229,7 +229,7 @@ petabytzuser2@masternode:~$ jps
 6158 NameNode
 ```
 
-Verify Hadoop daemons on any slave (here: slave1 and slave2), DataNode and NodeManager should run:
+Verify Hadoop daemons on any slave (here: datanode1 and datanode2), DataNode and NodeManager should run:
 ```bash
 $ jps
 1344 DataNode
