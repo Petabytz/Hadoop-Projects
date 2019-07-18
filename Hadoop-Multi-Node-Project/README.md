@@ -266,3 +266,22 @@ $ jps
 ## Monitor Hadoop ResourseManage and Hadoop NameNode via web-version
 
 ResourceManager: http://masternode:8088
+
+```Note: The Job Tracker and Task Tracker concepts are different in Hadoop YARN, In new version of Hadoop we can monitor jobs being executed at ResourseManage.```
+
+http://localhost:50070 – web UI of the NameNode daemon
+
+## Create input directory on HDFS:
+```bash
+petabytzuser2@masternode:~$ hadoop fs -mkdir /input
+```
+
+## Execute example program:
+```bash
+petabytzuser2@masternode:~$ hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples*.jar wordcount /input /output
+```
+
+## Check output directory:
+```bash
+petabytzuser2@masternode:~$ hadoop fs -ls /output
+```
