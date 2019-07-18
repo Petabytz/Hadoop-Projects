@@ -15,7 +15,7 @@ Hadoop 2.7.2
 
 Configuring single-node clusters first, here we have used three single node clusters. Shutdown each single-node cluster with the following command:
 ```bash
-hduser1@master:~$ $HADOOP_HOME/sbin/stop-all.sh
+petabytzuser2@petabytz:~$ $HADOOP_HOME/sbin/stop-all.sh
 ```
 
 ## Networking
@@ -24,7 +24,7 @@ The easiest is to put three machines in the same network with regard to hardware
 
 Update /etc/hosts on both machines. Put the alias to the ip addresses of all the machines. Here we are creating a cluster of 3 machines, one is master, one is slave1 and other is slave2:
 ```bash
-hduser1@master:$ sudo vim /etc/hosts
+petabytzuser2@petabytz:$ sudo vim /etc/hosts
 ```
 
 Add the following lines for two node cluster
@@ -36,31 +36,31 @@ Add the following lines for two node cluster
 
 ## SSH access
 
-The hduser1 user on the master (ssh hduser1@master) must be able to connect:
+The petabytzuser2 user on the master (ssh petabytzuser2@petabytz) must be able to connect:
 
 * to its own user account on the master – i.e. ssh master in this context.
-* to the hduser1 user account on the slave (i.e. ssh hduser1@slave1) via a password-less SSH login.
+* to the hduser1 user account on the slave (i.e. ssh petabytzuser2@slave1) via a password-less SSH login.
 
 ## Set up password-less SSH login between cluster:
 ```bash
-hduser1@master:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser1@slave1
-hduser1@master:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser1@slave2
+petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@slave1
+petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@slave2
 ```
 
 Connect with user hduser1 from the master to the user account hduser1 on the slave1 and slave2.
 From master to master
 ```bash
-hduser1@master:~$ ssh master
+petabytzuser2@oetabytz:~$ ssh masternode
 ```
 
 From master to slave1
 ```bash
-hduser1@master:~$ ssh slave1
+petabytzuser2@masternode:~$ ssh slave1
 ```
 
 From slave1 to slave2
 ```bash
-hduser1@slave1:~$ ssh slave2
+petabytzuser2@slave1:~$ ssh slave2
 ```
 
 ## Hadoop
@@ -75,7 +75,7 @@ This will describe how to configure one Ubuntu box as a master node and the othe
 
 Open this file in the ```$HADOOP_HOME/etc/hadoop/``` directory:
 ```bash
-$ sudo vim $HADOOP_HOME/etc/hadoop/core-site.xml
+$ sudo nano $HADOOP_HOME/etc/hadoop/core-site.xml
 ```
 
 GO to ```$HADOOP_HOME/etc/hadoop/core-site.xml (All nodes.)```
@@ -103,7 +103,7 @@ GO to ```$HADOOP_HOME/etc/hadoop/core-site.xml (All nodes.)```
 Open this file in the ```$HADOOP_HOME/etc/hadoop/``` directory
 
 ```bash
-$ sudo vim $HADOOP_HOME/etc/hadoop/mapred-site.xml
+$ sudo nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
 ```
 
 Change the mapred.job.tracker parameter (in ```$HADOOP_HOME/etc/hadoop/mapred-site.xml```), which specifies the JobTracker (MapReduce master) host and port and add mapred.framework.name property.
@@ -131,7 +131,7 @@ Change the mapred.job.tracker parameter (in ```$HADOOP_HOME/etc/hadoop/mapred-si
 Open this file in the ```$HADOOP_HOME/etc/hadoop/``` directory
 
 ```bash
-$ sudo vim $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+$ sudo nano $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 ```
 
 Change the dfs.replication parameter (in ```$HADOOP_HOME/etc/hadoop/hdfs-site.xml```) which specifies the default block replication. We have two nodes as slave available, so we set dfs.replication to 2. Changes to be like this:
@@ -152,15 +152,15 @@ Paste the following between ```<configuration></configuration>``` in file ```$HA
 ```bash
 <property>
     <name>yarn.resourcemanager.resource-tracker.address</name>
-    <value>master:8025</value>
+    <value>masternode:8025</value>
 </property>
 <property>
     <name>yarn.resourcemanager.scheduler.address</name>
-    <value>master:8035</value>
+    <value>masternode:8035</value>
 </property>
 <property>
     <name>yarn.resourcemanager.address</name>
-    <value>master:8050</value>
+    <value>masternode:8050</value>
 </property>
 ```
 
@@ -170,18 +170,18 @@ These are some configuration to be applied over Hadoop master nodes (Since we ha
 
 Remove existing Hadoop data folder (which was created while single-cluster hadoop setup.)
 ```bash
-hduser1@master:~$ sudo rm -rf /app/hadoop/tmp
+petabytzuser2@masternode:~$ sudo rm -rf /app/hadoop/tmp
 ```
 
 Make same (```/app/hadoop/tmp```) directory and create NameNode (```/usr/local/hadoop_tmp/hdfs/namenode```) directory:
 
 ```bash
-hduser1@master:~$ sudo mkdir -pv /app/hadoop/tmp/hdfs/namenode
+petabytzuser2@masternode:~$ sudo mkdir -pv /app/hadoop/tmp/hdfs/namenode
 ```
 
-Make hduser1 as owner of that directory:
+Make petabytzuser2 as owner of that directory:
 ```bash
-hduser1@master:~$ sudo chown hduser1:hadoop_group -R /app/hadoop/tmp/
+petabytzuser2@masternode:~$ sudo chown petabytzuser2:hadoop_petabyt_group -R /app/hadoop/tmp/
 ```
 
 ## Applying Slave node specific Hadoop configuration (Only for slave nodes)
@@ -200,7 +200,7 @@ $ sudo mkdir -pv /app/hadoop/tmp/hdfs/datanode
 
 Make hduser as owner of that directory
 ```bash
-$ sudo chown hduser1:hadoop_group -R /app/hadoop/tmp/
+$ sudo chown hduser1:hadoop_petabytz_group -R /app/hadoop/tmp/
 ```
 
 ## Formatting the HDFS filesystem via the NameNode (Only for master nodes)
@@ -213,7 +213,7 @@ $ hdfs namenode -format
 ## Starting the multi-node cluster (Only for master nodes)
 
 ```bash
-hduser1@master:~$ start-dfs.sh && start-yarn.sh
+petabytzuser2@masternode:~$ start-dfs.sh && start-yarn.sh
 ```
 
 By this command the NameNode daemon is started on master, and DataNode daemons are started on all slaves (here: slave1 and slave2).
@@ -222,7 +222,7 @@ By this command the NameNode daemon is started on master, and DataNode daemons a
 
 Verify Hadoop daemons on Master, run the following commands
 ```bash
-hduser1@master:~$ jps
+petabytzuser2@masternode:~$ jps
 7104 Jps
 6386 SecondaryNameNode
 6555 ResourceManager
