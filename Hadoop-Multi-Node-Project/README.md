@@ -27,12 +27,16 @@ Update /etc/hosts on both machines. Put the alias to the ip addresses of all the
 petabytzuser2@petabytzserver:$ sudo vim /etc/hosts
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(67).png)
+
 Add the following lines for two node cluster
 ```
 192.168.1.18    masternode  # IP address of the master node
 192.168.1.20    datanode1  # IP address of the datanode1 node
 192.168.1.21    datanode2  # IP address of the datanode2 node
 ```
+
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(66).png)
 
 ## SSH access
 
@@ -46,6 +50,8 @@ The petabytzuser2 user on the master (ssh petabytzuser2@petabytzserver) must be 
 petabytzuser2@petabytzserver:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode1
 petabytzuser2@petabytzserver:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode2
 ```
+
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(69).png)
 
 Connect with user petabytzuser2 from the master to the user account hduser1 on the datanode1 and datanode2.
 From master to master
@@ -62,6 +68,8 @@ From datanode1 to datanode2
 ```bash
 petabytzuser2@datanode1:~$ ssh datanode2
 ```
+
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(70).png)
 
 ## Hadoop
 
@@ -98,6 +106,8 @@ GO to ```$HADOOP_HOME/etc/hadoop/core-site.xml (All nodes.)```
 </property>
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(74).png)
+
 ## $HADOOP_HOME/etc/hadoop/mapred-site.xml (All nodes.)
 
 Open this file in the ```$HADOOP_HOME/etc/hadoop/``` directory
@@ -126,6 +136,8 @@ Change the mapred.job.tracker parameter (in ```$HADOOP_HOME/etc/hadoop/mapred-si
 </property>
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(71).png)
+
 ## $HADOOP_HOME/etc/hadoop/hdfs-site.xml (All nodes.)
 
 Open this file in the ```$HADOOP_HOME/etc/hadoop/``` directory
@@ -147,6 +159,10 @@ Change the dfs.replication parameter (in ```$HADOOP_HOME/etc/hadoop/hdfs-site.xm
 </property>
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(73).png)
+
+## $HADOOP_HOME/etc/hadoop/yarn-site.xml (All nodes.)
+
 Paste the following between ```<configuration></configuration>``` in file ```$HADOOP_HOME/etc/hadoop/yarn-site.xml```:
 
 ```bash
@@ -164,6 +180,8 @@ Paste the following between ```<configuration></configuration>``` in file ```$HA
 </property>
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(72).png)
+
 ## Applying Master node specific Hadoop configuration: (Only for master nodes)
 
 These are some configuration to be applied over Hadoop master nodes (Since we have only one master node it will be applied to only one master node.)
@@ -179,10 +197,14 @@ Make same (```/app/hadoop/tmp```) directory and create NameNode (```/usr/local/h
 petabytzuser2@masternode:~$ sudo mkdir -pv /app/hadoop/tmp/hdfs/namenode
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(75).png)
+
 Make petabytzuser2 as owner of that directory:
 ```bash
 petabytzuser2@masternode:~$ sudo chown petabytzuser2:hadoop_petabyt_group -R /app/hadoop/tmp/
 ```
+
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(76).png)
 
 ## Applying Slave node specific Hadoop configuration (Only for slave nodes)
 
@@ -203,12 +225,16 @@ Make hduser as owner of that directory
 $ sudo chown petabytzuser2:hadoop_petabytz_group -R /app/hadoop/tmp/
 ```
 
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(77).png)
+
 ## Formatting the HDFS filesystem via the NameNode (Only for master nodes)
 
 Format the cluster’s HDFS file system
 ```bash
 $ hdfs namenode -format
 ```
+
+![](https://github.com/Petabytz/Hadoop-Projects/blob/master/Hadoop-Multi-Node-Project/Screenshot%20(78).png)
 
 ## Starting the multi-node cluster (Only for master nodes)
 
