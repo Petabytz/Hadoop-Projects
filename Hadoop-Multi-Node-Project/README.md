@@ -15,7 +15,7 @@ Hadoop 2.7.2
 
 Configuring single-node clusters first, here we have used three single node clusters. Shutdown each single-node cluster with the following command:
 ```bash
-petabytzuser2@petabytz:~$ $HADOOP_HOME/sbin/stop-all.sh
+petabytzuser2@petabytzserver:~$ $HADOOP_HOME/sbin/stop-all.sh
 ```
 
 ## Networking
@@ -24,7 +24,7 @@ The easiest is to put three machines in the same network with regard to hardware
 
 Update /etc/hosts on both machines. Put the alias to the ip addresses of all the machines. Here we are creating a cluster of 3 machines, one is master, one is datanode1 and other is datanode2:
 ```bash
-petabytzuser2@petabytz:$ sudo vim /etc/hosts
+petabytzuser2@petabytzserver:$ sudo vim /etc/hosts
 ```
 
 Add the following lines for two node cluster
@@ -36,21 +36,21 @@ Add the following lines for two node cluster
 
 ## SSH access
 
-The petabytzuser2 user on the master (ssh petabytzuser2@petabytz) must be able to connect:
+The petabytzuser2 user on the master (ssh petabytzuser2@petabytzserver) must be able to connect:
 
 * to its own user account on the master – i.e. ssh master in this context.
 * to the hduser1 user account on the slave (i.e. ssh petabytzuser2@datanode1) via a password-less SSH login.
 
 ## Set up password-less SSH login between cluster:
 ```bash
-petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode1
-petabytzuser2@petabytz:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode2
+petabytzuser2@petabytzserver:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode1
+petabytzuser2@petabytzserver:~$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub petabytzuser2@datanode2
 ```
 
 Connect with user petabytzuser2 from the master to the user account hduser1 on the datanode1 and datanode2.
 From master to master
 ```bash
-petabytzuser2@oetabytz:~$ ssh masternode
+petabytzuser2@petabytzserver:~$ ssh masternode
 ```
 
 From master to datanode1
@@ -200,7 +200,7 @@ $ sudo mkdir -pv /app/hadoop/tmp/hdfs/datanode
 
 Make hduser as owner of that directory
 ```bash
-$ sudo chown hduser1:hadoop_petabytz_group -R /app/hadoop/tmp/
+$ sudo chown petabytzuser2:hadoop_petabytz_group -R /app/hadoop/tmp/
 ```
 
 ## Formatting the HDFS filesystem via the NameNode (Only for master nodes)
